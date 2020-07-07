@@ -10,7 +10,7 @@ jobs:
       MY_SECRET   : ${{secrets.commit_secret}}
       USER_NAME   : JackyTung
       USER_EMAIL  : jackytung8085@gmail.com
-      PUBLISH_DIR : ./dist
+      PUBLISH_DIR : ./build
     runs-on: ubuntu-latest
     strategy:
       matrix:
