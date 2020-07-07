@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { Provider } from 'react-redux';
-import { Redirect, Route, Switch, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 import { createBrowserHistory } from 'history';
 
