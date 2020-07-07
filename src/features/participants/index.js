@@ -11,7 +11,7 @@ import * as backend from '@/apis/backend';
 const initialState = { loaded: false, sources: [] };
 
 const slice = createSlice({
-  name: 'profile',
+  name: 'participants',
   initialState,
   reducers: {
     getParticipants: () => {},
