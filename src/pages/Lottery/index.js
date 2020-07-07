@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+import Page from '@/components/Page';
+import PageContent from '@/components/Page/PageContent';
+import PageTitle from '@/components/Page/PageTitle';
+
 const INTERVAL_SECOND = 1;
 const INTERVAL_MILLI_SECOND = INTERVAL_SECOND * 1000;
 
@@ -70,9 +74,12 @@ const CountDownTimer = () => {
 
 const Lottery = () => {
   return (
-    <div>
-      <CountDownTimer />
-    </div>
+    <Page>
+      <PageTitle title="Welcome to Lottery page" />
+      <PageContent>
+        <CountDownTimer />
+      </PageContent>
+    </Page>
   );
 };
 
