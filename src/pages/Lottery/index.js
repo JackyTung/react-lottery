@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -6,26 +7,42 @@ import TextField from '@material-ui/core/TextField';
 import Page from '@/components/Page';
 import PageContent from '@/components/Page/PageContent';
 import PageTitle from '@/components/Page/PageTitle';
+import { startCounter, updateCounter } from '@/features/timer';
 
 const INTERVAL_SECOND = 1;
 const INTERVAL_MILLI_SECOND = INTERVAL_SECOND * 1000;
 
-const CountDownTimer = () => {
-  const [counter, setCounter] = useState(0);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [isRunning, setIsRunning] = useState(false);
+const DisplayTimer = () => {
+  const dispatch = useDispatch();
+  const counter = useSelector(state => state.timer.counter);
+  const isRunning = useSelector(state => state.timer.isRunning);
 
   useEffect(() => {
     const timer =
-      counter > 0 && isRunning && setInterval(() => setCounter(counter - INTERVAL_SECOND), INTERVAL_MILLI_SECOND);
-
-    if (counter === 0 && isRunning) {
-      // TODO: dispatch getLottery Action
-      setIsRunning(false);
-    }
+      counter > 0 &&
+      isRunning &&
+      setInterval(() => dispatch(updateCounter({ counter: counter - INTERVAL_SECOND })), INTERVAL_MILLI_SECOND);
 
     return () => clearInterval(timer);
   }, [counter, isRunning]);
+
+  return <div>Countdown: {counter || 0}</div>;
+};
+
+const InputTimer = () => {
+  const dispatch = useDispatch();
+  const [value, setValue] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleStart = () => {
+    if (value <= 0) {
+      return setErrorMsg('* 請輸入大於0的數字');
+    }
+
+    dispatch(updateCounter({ counter: value }));
+    dispatch(startCounter());
+    setValue('');
+  };
 
   const handleOnChange = e => {
     const value = e.target.value;
@@ -33,17 +50,9 @@ const CountDownTimer = () => {
       return setErrorMsg('* 請輸入大於0的數字');
     }
     setErrorMsg('');
-    return setCounter(value);
+    return setValue(value);
   };
 
-  const handleStart = () => {
-    if (counter <= 0) {
-      return setErrorMsg('* 請輸入大於0的數字');
-    }
-    return setIsRunning(true);
-  };
-
-  // TODO: input text field, start button, stop button, reset button
   return (
     <>
       <TextField
@@ -54,20 +63,23 @@ const CountDownTimer = () => {
           shrink: true,
         }}
         variant="filled"
+        value={value}
         onChange={handleOnChange}
         helperText={errorMsg}
         error={!!errorMsg}
       />
-      <div>Countdown: {counter || 0}</div>
-      {isRunning ? (
-        <Button variant="contained" color="primary">
-          reset
-        </Button>
-      ) : (
-        <Button variant="contained" color="primary" onClick={handleStart}>
-          start
-        </Button>
-      )}
+      <Button variant="contained" color="primary" onClick={handleStart}>
+        start
+      </Button>
+    </>
+  );
+};
+
+const CountDownTimer = () => {
+  return (
+    <>
+      <InputTimer />
+      <DisplayTimer />
     </>
   );
 };
