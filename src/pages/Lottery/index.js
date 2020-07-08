@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Page from '@/components/Page';
 import PageContent from '@/components/Page/PageContent';
 import PageTitle from '@/components/Page/PageTitle';
-import { startCounter, updateCounter } from '@/features/timer';
+import { startCounter, updateCountDownCounter, setCounter } from '@/features/timer';
 
 const INTERVAL_SECOND = 1;
 const INTERVAL_MILLI_SECOND = INTERVAL_SECOND * 1000;
@@ -18,12 +18,9 @@ const DisplayTimer = () => {
   const isRunning = useSelector(state => state.timer.isRunning);
 
   useEffect(() => {
-    const timer =
-      counter > 0 &&
-      isRunning &&
-      setInterval(() => dispatch(updateCounter({ counter: counter - INTERVAL_SECOND })), INTERVAL_MILLI_SECOND);
-
-    return () => clearInterval(timer);
+    if (counter > 0 && isRunning) {
+      dispatch(updateCountDownCounter());
+    }
   }, [counter, isRunning]);
 
   return <div>Countdown: {counter || 0}</div>;
@@ -39,7 +36,7 @@ const InputTimer = () => {
       return setErrorMsg('* 請輸入大於0的數字');
     }
 
-    dispatch(updateCounter({ counter: value }));
+    dispatch(setCounter({ counter: value }));
     dispatch(startCounter());
     setValue('');
   };
