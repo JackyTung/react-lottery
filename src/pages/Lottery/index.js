@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import addSeconds from 'date-fns/addSeconds';
+import format from 'date-fns/format';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
@@ -8,6 +11,12 @@ import Page from '@/components/Page';
 import PageContent from '@/components/Page/PageContent';
 import PageTitle from '@/components/Page/PageTitle';
 import { setCounter, startCounter, stopCounter, updateCountDownCounter } from '@/features/timer';
+
+const formattedTime = seconds => {
+  const helperDate = addSeconds(new Date(0), seconds);
+  // TODO: handle second > 3600
+  return format(helperDate, 'mm:ss');
+};
 
 const DisplayTimer = () => {
   const dispatch = useDispatch();
@@ -20,7 +29,10 @@ const DisplayTimer = () => {
     }
   }, [counter, isRunning, dispatch]);
 
-  return <div>Countdown: {counter || 0}</div>;
+  if (counter <= 0) {
+    return <div>00:00</div>;
+  }
+  return <div>{formattedTime(counter)}</div>;
 };
 
 const InputTimer = () => {
