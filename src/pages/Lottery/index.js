@@ -7,10 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Page from '@/components/Page';
 import PageContent from '@/components/Page/PageContent';
 import PageTitle from '@/components/Page/PageTitle';
-import { startCounter, updateCountDownCounter, setCounter } from '@/features/timer';
-
-const INTERVAL_SECOND = 1;
-const INTERVAL_MILLI_SECOND = INTERVAL_SECOND * 1000;
+import { setCounter, startCounter, stopCounter, updateCountDownCounter } from '@/features/timer';
 
 const DisplayTimer = () => {
   const dispatch = useDispatch();
@@ -21,7 +18,7 @@ const DisplayTimer = () => {
     if (counter > 0 && isRunning) {
       dispatch(updateCountDownCounter());
     }
-  }, [counter, isRunning]);
+  }, [counter, isRunning, dispatch]);
 
   return <div>Countdown: {counter || 0}</div>;
 };
@@ -30,6 +27,7 @@ const InputTimer = () => {
   const dispatch = useDispatch();
   const [value, setValue] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const isRunning = useSelector(state => state.timer.isRunning);
 
   const handleStart = () => {
     if (value <= 0) {
@@ -40,6 +38,8 @@ const InputTimer = () => {
     dispatch(startCounter());
     setValue('');
   };
+
+  const handleStop = () => dispatch(stopCounter());
 
   const handleOnChange = e => {
     const value = e.target.value;
@@ -65,9 +65,15 @@ const InputTimer = () => {
         helperText={errorMsg}
         error={!!errorMsg}
       />
-      <Button variant="contained" color="primary" onClick={handleStart}>
-        start
-      </Button>
+      {isRunning ? (
+        <Button variant="contained" color="primary" onClick={handleStop}>
+          stop
+        </Button>
+      ) : (
+        <Button variant="contained" color="primary" onClick={handleStart}>
+          start
+        </Button>
+      )}
     </>
   );
 };

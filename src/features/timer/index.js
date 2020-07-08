@@ -1,5 +1,3 @@
-import { ofType } from 'redux-observable';
-
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
@@ -23,6 +21,9 @@ const slice = createSlice({
     startCounter: (state, action) => {
       state.isRunning = true;
     },
+    stopCounter: (state, action) => {
+      state.isRunning = false;
+    },
     resetCounter: () => initialState,
   },
 });
@@ -30,7 +31,7 @@ const slice = createSlice({
 export const epics = {
   updateCountDownCounter: (action$, state$, action) => {
     const counter = state$.value.timer.counter;
-    return of(updateCountDownCounterFulfilled({ counter: counter - 1 })).delay(1000);
+    return of(updateCountDownCounterFulfilled({ counter: counter - 1 })).pipe(delay(1000));
   },
 };
 
@@ -39,6 +40,7 @@ export const {
   updateCountDownCounter,
   updateCountDownCounterFulfilled,
   startCounter,
+  stopCounter,
   resetCounter,
 } = slice.actions;
 
