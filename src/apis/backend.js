@@ -1,9 +1,11 @@
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-export const getParticipants = () =>
+import { members } from '@/constants/memberData';
+
+export const getMembers = () =>
   of({
     response: {
-      participants: [{ name: 'user1' }],
+      members,
     },
   }).pipe(delay(1500));

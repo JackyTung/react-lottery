@@ -11,6 +11,7 @@ import Page from '@/components/Page';
 import PageContent from '@/components/Page/PageContent';
 import PageTitle from '@/components/Page/PageTitle';
 import { setCounter, startCounter, stopCounter, updateCountDownCounter } from '@/features/timer';
+import MemberList from './MemberList';
 
 const formattedTime = seconds => {
   const helperDate = addSeconds(new Date(0), seconds);
@@ -105,6 +106,7 @@ const Lottery = () => {
       <PageTitle title="Welcome to Lottery page" />
       <PageContent>
         <CountDownTimer />
+        <MemberList />
       </PageContent>
     </Page>
   );
