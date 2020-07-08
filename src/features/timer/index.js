@@ -1,4 +1,4 @@
-import { of } from 'rxjs';
+import { concat, empty, iif, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 import { createSlice } from '@reduxjs/toolkit';
@@ -30,8 +30,11 @@ const slice = createSlice({
 
 export const epics = {
   updateCountDownCounter: (action$, state$, action) => {
-    const counter = state$.value.timer.counter;
-    return of(updateCountDownCounterFulfilled({ counter: counter - 1 })).pipe(delay(1000));
+    const newCounter = state$.value.timer.counter - 1;
+    return concat(
+      of(updateCountDownCounterFulfilled({ counter: newCounter })).pipe(delay(1000)),
+      iif(() => newCounter === 0, of(stopCounter()), empty()),
+    );
   },
 };
 
