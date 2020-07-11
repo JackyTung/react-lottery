@@ -10,6 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import Page from '@/components/Page';
 import PageContent from '@/components/Page/PageContent';
 import PageTitle from '@/components/Page/PageTitle';
+import Progress from '@/components/Progress';
+import { getMembers, getMembersCancelled } from '@/features/members';
 import { setCounter, startCounter, stopCounter, updateCountDownCounter } from '@/features/timer';
 import MemberList from './MemberList';
 
@@ -93,20 +95,34 @@ const InputTimer = () => {
 
 const CountDownTimer = () => {
   return (
-    <>
+    <div>
       <InputTimer />
       <DisplayTimer />
-    </>
+    </div>
   );
 };
 
 const Lottery = () => {
+  const dispatch = useDispatch();
+  const loaded = useSelector(state => state.members.loaded);
+  useEffect(() => {
+    dispatch(getMembers());
+
+    return () => dispatch(getMembersCancelled());
+  }, [dispatch]);
+
   return (
     <Page>
       <PageTitle title="Welcome to Lottery page" />
       <PageContent>
-        <CountDownTimer />
-        <MemberList />
+        {!loaded ? (
+          <Progress />
+        ) : (
+          <div className="d-flex justify-space-around">
+            <CountDownTimer />
+            <MemberList />
+          </div>
+        )}
       </PageContent>
     </Page>
   );
