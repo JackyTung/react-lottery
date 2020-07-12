@@ -82,11 +82,8 @@ const InputTimer = () => {
       <div style={{ marginRight: 8 }}>
         <TextField
           id="filled-number"
-          label="Number"
+          label="enter seconds"
           type="number"
-          InputLabelProps={{
-            shrink: true,
-          }}
           variant="filled"
           value={value}
           onChange={handleOnChange}
@@ -104,6 +101,7 @@ const InputTimer = () => {
 const CountDownTimer = () => {
   return (
     <div>
+      <Typography variant="h5">Countdown Timer</Typography>
       <InputTimer />
       <DisplayTimer />
     </div>
