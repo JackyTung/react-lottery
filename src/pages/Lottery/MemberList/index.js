@@ -7,6 +7,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 export const getLetterAvatar = name => name && name.substring(0, 2).toUpperCase();
 
@@ -33,16 +34,19 @@ const MemberList = () => {
   const members = useSelector(state => state.members.sources);
 
   return (
-    <List className={classes.list}>
-      {members.map(member => (
-        <ListItem key={member._id}>
-          <ListItemAvatar>
-            <Avatar className={classes.avatar}>{getLetterAvatar(member.name)}</Avatar>
-          </ListItemAvatar>
-          <ListItemText primary={member.name} secondary={member.email} />
-        </ListItem>
-      ))}
-    </List>
+    <div>
+      <Typography variant="h5">Member List</Typography>
+      <List className={classes.list}>
+        {members.map(member => (
+          <ListItem key={member._id}>
+            <ListItemAvatar>
+              <Avatar className={classes.avatar}>{getLetterAvatar(member.name)}</Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={member.name} secondary={member.email} />
+          </ListItem>
+        ))}
+      </List>
+    </div>
   );
 };
 

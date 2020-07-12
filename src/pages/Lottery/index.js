@@ -3,32 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import addSeconds from 'date-fns/addSeconds';
 import format from 'date-fns/format';
+import isEmpty from 'lodash/isEmpty';
 
-import Button from '@material-ui/core/Button';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
+import Button from '@/components/Button';
+import LuckyWinnerDialog from '@/components/Dialog/LuckyWinner';
 import Page from '@/components/Page';
 import PageContent from '@/components/Page/PageContent';
 import PageTitle from '@/components/Page/PageTitle';
 import Progress from '@/components/Progress';
-import { getMembers, getMembersCancelled } from '@/features/members';
+import { getMembers, getMembersCancelled, resetLuckyNumber } from '@/features/members';
 import { setCounter, startCounter, stopCounter, updateCountDownCounter } from '@/features/timer';
 import MemberList from './MemberList';
-
-const styles = theme => ({
-  button: {
-    borderRadius: 20,
-    border: `1px solid ${theme.palette.primary.main}`,
-    color: 'white',
-    '&:hover': {
-      color: theme.palette.primary.main,
-      backgroundColor: 'white',
-    },
-  },
-});
-
-const useStyles = makeStyles(createStyles(styles));
+import { selectLuckyWinner } from './selectors';
 
 const formattedTime = seconds => {
   const helperDate = addSeconds(new Date(0), seconds);
@@ -48,14 +37,21 @@ const DisplayTimer = () => {
   }, [counter, isRunning, dispatch]);
 
   if (counter <= 0) {
-    return <div>00:00</div>;
+    return (
+      <Typography variant="h1" color="textPrimary">
+        00:00
+      </Typography>
+    );
   }
-  return <div>{formattedTime(counter)}</div>;
+  return (
+    <Typography variant="h1" color="textPrimary">
+      {formattedTime(counter)}
+    </Typography>
+  );
 };
 
 const InputTimer = () => {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const [value, setValue] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const isRunning = useSelector(state => state.timer.isRunning);
@@ -82,30 +78,26 @@ const InputTimer = () => {
   };
 
   return (
-    <>
-      <TextField
-        id="filled-number"
-        label="Number"
-        type="number"
-        InputLabelProps={{
-          shrink: true,
-        }}
-        variant="filled"
-        value={value}
-        onChange={handleOnChange}
-        helperText={errorMsg}
-        error={!!errorMsg}
-      />
-      {isRunning ? (
-        <Button variant="contained" color="primary" className={classes.button} onClick={handleStop}>
-          stop
-        </Button>
-      ) : (
-        <Button variant="contained" color="primary" className={classes.button} disableElevation onClick={handleStart}>
-          start
-        </Button>
-      )}
-    </>
+    <div className="d-flex">
+      <div style={{ marginRight: 8 }}>
+        <TextField
+          id="filled-number"
+          label="Number"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="filled"
+          value={value}
+          onChange={handleOnChange}
+          helperText={errorMsg}
+          error={!!errorMsg}
+        />
+      </div>
+      <div style={{ marginTop: 8 }}>
+        {isRunning ? <Button onClick={handleStop}>stop</Button> : <Button onClick={handleStart}>start</Button>}
+      </div>
+    </div>
   );
 };
 
@@ -121,11 +113,15 @@ const CountDownTimer = () => {
 const Lottery = () => {
   const dispatch = useDispatch();
   const loaded = useSelector(state => state.members.loaded);
+  const winner = useSelector(selectLuckyWinner);
+
   useEffect(() => {
     dispatch(getMembers());
 
     return () => dispatch(getMembersCancelled());
   }, [dispatch]);
+
+  const handleCancel = () => dispatch(resetLuckyNumber());
 
   return (
     <Page>
@@ -134,10 +130,13 @@ const Lottery = () => {
         {!loaded ? (
           <Progress />
         ) : (
-          <div className="d-flex justify-space-around">
-            <CountDownTimer />
-            <MemberList />
-          </div>
+          <>
+            <div className="d-flex justify-space-around">
+              <CountDownTimer />
+              <MemberList />
+            </div>
+            <LuckyWinnerDialog open={!isEmpty(winner)} handleCancel={handleCancel} name={winner.name} />
+          </>
         )}
       </PageContent>
     </Page>

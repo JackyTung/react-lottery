@@ -3,6 +3,8 @@ import { delay } from 'rxjs/operators';
 
 import { createSlice } from '@reduxjs/toolkit';
 
+import { getLuckyNumber } from '@/features/members';
+
 const initialState = { counter: 0, isRunning: false };
 
 const slice = createSlice({
@@ -33,7 +35,7 @@ export const epics = {
     const newCounter = state$.value.timer.counter - 1;
     return concat(
       of(updateCountDownCounterFulfilled({ counter: newCounter })).pipe(delay(1000)),
-      iif(() => newCounter === 0, of(stopCounter()), empty()),
+      iif(() => newCounter === 0, of(stopCounter(), getLuckyNumber()), empty()),
     );
   },
 };
