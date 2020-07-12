@@ -5,6 +5,7 @@ import addSeconds from 'date-fns/addSeconds';
 import format from 'date-fns/format';
 
 import Button from '@material-ui/core/Button';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
 import Page from '@/components/Page';
@@ -14,6 +15,20 @@ import Progress from '@/components/Progress';
 import { getMembers, getMembersCancelled } from '@/features/members';
 import { setCounter, startCounter, stopCounter, updateCountDownCounter } from '@/features/timer';
 import MemberList from './MemberList';
+
+const styles = theme => ({
+  button: {
+    borderRadius: 20,
+    border: `1px solid ${theme.palette.primary.main}`,
+    color: 'white',
+    '&:hover': {
+      color: theme.palette.primary.main,
+      backgroundColor: 'white',
+    },
+  },
+});
+
+const useStyles = makeStyles(createStyles(styles));
 
 const formattedTime = seconds => {
   const helperDate = addSeconds(new Date(0), seconds);
@@ -40,6 +55,7 @@ const DisplayTimer = () => {
 
 const InputTimer = () => {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const [value, setValue] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const isRunning = useSelector(state => state.timer.isRunning);
@@ -81,11 +97,11 @@ const InputTimer = () => {
         error={!!errorMsg}
       />
       {isRunning ? (
-        <Button variant="contained" color="primary" onClick={handleStop}>
+        <Button variant="contained" color="primary" className={classes.button} onClick={handleStop}>
           stop
         </Button>
       ) : (
-        <Button variant="contained" color="primary" onClick={handleStart}>
+        <Button variant="contained" color="primary" className={classes.button} disableElevation onClick={handleStart}>
           start
         </Button>
       )}

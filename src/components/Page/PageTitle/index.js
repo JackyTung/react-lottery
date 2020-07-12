@@ -14,7 +14,7 @@ const PageTitle = ({ title = '' }) => {
   return (
     <AppBar position="sticky" elevation={0} className={classes.root}>
       <Toolbar className="justify-center">
-        <Typography variant="h6" color="textPrimary">
+        <Typography variant="h6" className={classes.text}>
           {title}
         </Typography>
       </Toolbar>

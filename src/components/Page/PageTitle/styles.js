@@ -4,8 +4,11 @@ const styles = theme => ({
     left: 0,
     zIndex: 1299,
     width: '100%',
-    backgroundColor: '#F8F8F8',
-    borderBottom: '1px solid #E27D60',
+    backgroundColor: theme.palette.background.main,
+    borderBottom: `1px solid ${theme.palette.border.main}`,
+  },
+  text: {
+    color: 'white',
   },
 });
 

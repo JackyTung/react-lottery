@@ -15,10 +15,14 @@ const styles = theme => ({
     width: 300,
     maxHeight: 500,
     overflowY: 'scroll',
-    border: '1px solid red',
+    border: `1px solid ${theme.palette.border.main}`,
+    backgroundColor: theme.palette.button.main,
   },
   text: {
     color: 'black',
+  },
+  avatar: {
+    backgroundColor: theme.palette.secondary.main,
   },
 });
 
@@ -33,7 +37,7 @@ const MemberList = () => {
       {members.map(member => (
         <ListItem key={member._id}>
           <ListItemAvatar>
-            <Avatar>{getLetterAvatar(member.name)}</Avatar>
+            <Avatar className={classes.avatar}>{getLetterAvatar(member.name)}</Avatar>
           </ListItemAvatar>
           <ListItemText primary={member.name} secondary={member.email} />
         </ListItem>
