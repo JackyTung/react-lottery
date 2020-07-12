@@ -1,4 +1,4 @@
-This project is a demo for lottery. You can view demo on my [github page](jackytung.github.io/react-lottery/)
+This project is a demo for lottery. You can view demo on my [github page](https://jackytung.github.io/react-lottery/)
 
 # How to run
 - Step1 : `yarn init`
