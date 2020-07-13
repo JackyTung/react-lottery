@@ -8,9 +8,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import * as backend from '@/apis/backend';
 
-const initialState = { loaded: false, sources: [], luckyNumber: -1, page: 1, limit: 5, total: 0, hasMore: false };
-
-const getRandomNumber = max => Math.floor(Math.random() * Math.floor(max));
+const initialState = { loaded: false, sources: [], page: 1, limit: 5, total: 0, hasMore: false };
 
 const slice = createSlice({
   name: 'members',
@@ -28,14 +26,6 @@ const slice = createSlice({
     },
     getMembersRejected: (state, action) => state,
     getMembersCancelled: () => initialState,
-    getLuckyNumber: (state, action) => {
-      const { sources } = state;
-      const number = getRandomNumber(sources.length);
-      state.luckyNumber = number;
-    },
-    resetLuckyNumber: (state, action) => {
-      state.luckyNumber = -1;
-    },
   },
 });
 
@@ -51,13 +41,6 @@ export const epics = {
   },
 };
 
-export const {
-  getMembers,
-  getMembersFulfilled,
-  getMembersRejected,
-  getMembersCancelled,
-  getLuckyNumber,
-  resetLuckyNumber,
-} = slice.actions;
+export const { getMembers, getMembersFulfilled, getMembersRejected, getMembersCancelled } = slice.actions;
 
 export default slice.reducer;

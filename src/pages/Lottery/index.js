@@ -14,14 +14,13 @@ import Page from '@/components/Page';
 import PageContent from '@/components/Page/PageContent';
 import PageTitle from '@/components/Page/PageTitle';
 import Progress from '@/components/Progress';
-import { getMembers, getMembersCancelled, resetLuckyNumber } from '@/features/members';
+import { getLuckyMemberCancelled } from '@/features/lottery';
+import { getMembers, getMembersCancelled } from '@/features/members';
 import { setCounter, startCounter, stopCounter, updateCountDownCounter } from '@/features/timer';
 import MemberList from './MemberList';
-import { selectLuckyWinner } from './selectors';
 
 const formattedTime = seconds => {
   const helperDate = addSeconds(new Date(0), seconds);
-  // TODO: handle second > 3600
   return format(helperDate, 'mm:ss');
 };
 
@@ -111,7 +110,7 @@ const CountDownTimer = () => {
 const Lottery = () => {
   const dispatch = useDispatch();
   const loaded = useSelector(state => state.members.loaded);
-  const winner = useSelector(selectLuckyWinner);
+  const lottery = useSelector(state => state.lottery);
 
   useEffect(() => {
     dispatch(getMembers());
@@ -119,7 +118,7 @@ const Lottery = () => {
     return () => dispatch(getMembersCancelled());
   }, [dispatch]);
 
-  const handleCancel = () => dispatch(resetLuckyNumber());
+  const handleCancel = () => dispatch(getLuckyMemberCancelled());
 
   return (
     <Page>
@@ -133,7 +132,7 @@ const Lottery = () => {
               <CountDownTimer />
               <MemberList />
             </div>
-            <LuckyWinnerDialog open={!isEmpty(winner)} handleCancel={handleCancel} name={winner.name} />
+            <LuckyWinnerDialog open={!isEmpty(lottery.name)} handleCancel={handleCancel} name={lottery.name} />
           </>
         )}
       </PageContent>

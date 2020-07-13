@@ -11,3 +11,8 @@ export const getMembers = ({ page, limit }) => {
     },
   }).pipe(delay(1500));
 };
+
+export const getLuckyMember = ({ number }) =>
+  of({
+    member: members[number - 1],
+  }).pipe(delay(1500));
