@@ -4,9 +4,11 @@ import classNames from 'classnames';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const Progress = ({ message }) => (
+const Progress = ({ message, height }) => (
   <div className={classNames('d-flex flex-column justify-center align-center vh-100')}>
-    <CircularProgress />
+    <div style={{ height }}>
+      <CircularProgress />
+    </div>
     {message && (
       <>
         <br />
